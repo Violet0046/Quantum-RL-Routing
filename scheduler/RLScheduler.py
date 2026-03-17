@@ -82,6 +82,7 @@ class RLScheduler:
             net_arch=self.config["policy"]["net_arch"]
         )
         # 生成动态的时间戳目录名
+        os.makedirs("experiments/logs", exist_ok=True)
         timestamp = time.strftime("%Y%m%d_%H%M%S")
         run_id = f"{self.exp_name}_{timestamp}"
         tensorboard_root = f"./experiments/logs"
