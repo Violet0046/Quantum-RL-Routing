@@ -1,0 +1,29 @@
+# Quantum_RL/hyperparams/hyperparams.yml
+# PPO 算法与环境的超参数配置文件
+
+experiment_name: "ppo_uec_optimized"
+
+# 随机种子配置 (分段播种)
+seed:
+  topo_seed: 202433851      # 保证拓扑结构一致
+
+# PPO 算法核心超参数
+ppo:
+  learning_rate: 0.0003
+  n_steps: 4096    #拓宽视野，拉升解释方差
+  batch_size: 512    #平滑价值损失曲线
+  gamma: 0.999       #增加视野
+  ent_coef: 0.01     # 熵系数：设大一点可以鼓励智能体在早期多探索，避免它一直选“拒绝”
+  clip_range: 0.2
+
+# 神经网络架构配置
+policy:
+  features_dim: 512
+  # 拓宽并加深 MLP 的宽度
+  # 让 1312 维的输入先进入 512，再到 256，最后做决策
+  net_arch: [512, 256, 128]
+
+
+# 训练进度控制
+training:
+  total_steps: 15000000     # 100000 用于代码测试  用于真正训练       3000000

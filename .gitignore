@@ -1,0 +1,20 @@
+# Python 编译缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# 虚拟环境
+venv/
+env/
+.idea/
+*.csv
+# 训练产生的海量日志和超大模型文件
+experiments/logs/
+experiments/models/*.zip
+experiments/models/*/data
+experiments/models/*/pytorch_variables.pth
+experiments/models/*/policy.pth
+
+# 操作系统自动产生的隐藏文件
+.DS_Store
+Thumbs.db

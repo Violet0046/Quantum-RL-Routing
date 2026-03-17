@@ -1,0 +1,28 @@
+QuantumNetworkManager: network = QuantumNetworkManager() 用generate_waxman_topology生成拓扑
+QuantumRouter: router = QuantumRouter(network.graph, UECMetric()) 创建路由类
+
+事件流程：
+       RequestGenerator: rg = RequestGenerator(network)   生成请求 requests = rg.generate_multiple_requests(num_requests)   #PENDING状态
+       router.k_shortest_paths(requests)   #UEC_eff更新成功，请求分为ROUTED、BLOCKED_TOPOLOGY、BLOCKED_FIDELITY三种状态
+       
+       处理ROUTED请求:
+              请求属性candidate_costs[k](其中k为路径索引), waiting_slots为等待时隙
+              将candidate_costs[k]和waiting_slots的计算公式,作为排序权重,权重低的先进行分配
+              使用的是PathCandidate路径候选者包装类:将请求的K条路径进行包装,调度池中使用sort_score进行排序
+                     若某个PathCandidate对应的request在分配过程中执行了request.status = RequestStatus.ACCEPTED,那么该请求对应的所有PathCandidate应被移出调度池
+
+
+       PathCandidate循环结束,当前时隙结束:
+              
+       进入下一个时隙
+       清空所有节点占用状态: current_rate, current_memory = 0
+       需要对于当前所有ROUTED请求中的waiting_slots + 1
+       生成新的请求,需要执行k_shortest_paths
+       处理ROUTED请求:
+              此时ROUTED请求包含所有时隙
+
+
+请求排序策略：
+class SchedulingPolicy(Enum):
+    REQUEST_LEVEL = auto()  # 策略 A: 只满足请求k_shortest_paths[0]的路径
+    PATH_LEVEL = auto()     # 策略 B: 以路径为单位 (打散所有路，全局混排)
