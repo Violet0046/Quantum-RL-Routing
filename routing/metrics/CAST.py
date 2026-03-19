@@ -2,7 +2,8 @@ import networkx as nx
 import math
 from typing import List, Dict, Any
 from .BaseMetric import RoutingMetric
-from utils.Constants import P_SWAP_DEFAULT 
+from utils.Constants import P_SWAP_DEFAULT
+from core.Link import QuantumLink
 
 class Q_CASTMetric(RoutingMetric):
 
@@ -36,13 +37,13 @@ class Q_CASTMetric(RoutingMetric):
                 w_u = graph.nodes[u].get('max_memory', 50) # 默认值防报错
                 w_v = graph.nodes[v].get('max_memory', 50)
                 width = min(w_u, w_v)
-            
-            # 获取该边的单次成功率 p
-            # 优先从边属性读取，如果没有，则根据距离计算或使用默认值
-            p = edge_data.get('p_link') 
-            if p is None:
-                # 如果没有预计算 p_link，可能需要用距离临时算，这里暂给默认值
-                p = 0.9 
+
+            # 获取链路成功率
+            link: QuantumLink | None = edge_data.get('object', None)
+            if link:
+                p = link.attenuation
+            else:
+                p = 0.9
 
             edges_props.append({'w': width, 'p': p})
             if width < min_path_width:
