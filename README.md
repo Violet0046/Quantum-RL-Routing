@@ -37,6 +37,10 @@
    定制专属的 `[512, 256, 128]` 大容量特征提取器，完美融合了包含网络拓扑资源、**基于 UEC 评估的路径特征**和全局上下文的 1300+ 维状态张量，赋予了智能体极强的底层物理直觉。
 3. **前瞻视窗 ($W=10$)**：
    引入滑动窗口状态表示机制。RL 智能体不仅能感知当前请求，还能“看穿”未来 9 个排队中的请求画像，实现跨时隙的全局统筹与核心资源预留。
+4. **两阶段混合残差调度架构 (Two-Stage RL-Augmented Heuristic Scheduling)**：
+    创新性地提出了一种“宏观统筹+微观扫尾”的隐式竞合（Coopetition）混合架构。RL 智能体充当统筹者，专注于跨时隙的长尾拥塞博弈与战略性骨干资源分配；
+    而在每个时隙末尾，利用 UEC 贪婪算法作为“残差安全网（Residual Safety Net）”榨干物理碎片。
+    通过精心设计的“惩罚退还”机制诱导智能体学会任务委托，在为系统提供极高物理保底（Lower-bound）的同时，有效突破了极限吞吐量上限。
 
 ### 📂 项目结构
 
@@ -65,6 +69,10 @@
 * **评估已训练的强化学习模型 (RL Agent)**：
   代码底部的 `scheduler.evaluate(...)` 方法专门用于测试强化学习智能体的动态调度能力。它会加载指定路径下的 `.zip` 模型参数，并在 `experiments/results/` 目录下输出评估报告。
   `scheduler.evaluate(model_path=MODEL_PATH, test_pool=request_dataset)`
+* 两阶段混合架构 (Hybrid Architecture Evaluation) ：
+  新增训练包含贪婪扫尾的混合智能体 (Hybrid Agent)：python run_hybrid_train.py
+  运行 evaluate_hybrid_model.py，该脚本将调用核心模块 HybridScheduler.py。
+  在此模式下，预训练的 RL 智能体将与贪婪算法协同作战（RL 负责高ROI请求分配，Greedy 负责时隙末尾的兜底捡漏），在 experiments/results/ 目录下输出融合架构的极限界限评估报告。
 
 ---
 
