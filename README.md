@@ -69,7 +69,7 @@
 * **评估已训练的强化学习模型 (RL Agent)**：
   代码底部的 `scheduler.evaluate(...)` 方法专门用于测试强化学习智能体的动态调度能力。它会加载指定路径下的 `.zip` 模型参数，并在 `experiments/results/` 目录下输出评估报告。
   `scheduler.evaluate(model_path=MODEL_PATH, test_pool=request_dataset)`
-* 两阶段混合架构 (Hybrid Architecture Evaluation) ：
+* **两阶段混合架构 (Hybrid Architecture Evaluation)**：
   新增训练包含贪婪扫尾的混合智能体 (Hybrid Agent)：python run_hybrid_train.py
   运行 evaluate_hybrid_model.py，该脚本将调用核心模块 HybridScheduler.py。
   在此模式下，预训练的 RL 智能体将与贪婪算法协同作战（RL 负责高ROI请求分配，Greedy 负责时隙末尾的兜底捡漏），在 experiments/results/ 目录下输出融合架构的极限界限评估报告。
