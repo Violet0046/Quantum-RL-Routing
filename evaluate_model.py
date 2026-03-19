@@ -21,9 +21,9 @@ if __name__ == "__main__":
 # ----------------------     进行RL模型测试     ----------------------
     # 1. 实例化统管中心
     scheduler = RLScheduler()   #内部用固定自行生成拓扑，传入环境
-#改成测试步数 1000
+
     # 2. 指定测试的模型路径
-    MODEL_PATH = "experiments/models/ppo_uec_V11.zip"
+    MODEL_PATH = "experiments/models/ppo_hybrid_V1.zip"
 
     # 3. 启动评估
     scheduler.evaluate(model_path = MODEL_PATH, test_pool = request_dataset)   #深拷贝请求
